@@ -22,6 +22,7 @@ import android.widget.ListView;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
 
 public class newGalleryActivity extends AppCompatActivity {
     ImagesAdapter adapter;
@@ -32,36 +33,25 @@ public class newGalleryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_new_gallery);
 
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        if(actionBar != null)  actionBar.setDisplayHomeAsUpEnabled(true);
 
         Intent myIntent = getIntent();
         String folderName = myIntent.getStringExtra("name");
 
-        LinearLayout linearLayout = findViewById(R.id.newAlbumsFolderLayout);
-
         File mainDir = Environment.getExternalStoragePublicDirectory( Environment.DIRECTORY_PICTURES + "/JakubKowal/" + folderName );
-        ArrayList<File> filesArray = new ArrayList<>(Arrays.asList(mainDir.listFiles()));
+        ArrayList<File> filesArray = new ArrayList<>(Arrays.asList(Objects.requireNonNull(mainDir.listFiles())));
 
 
         adapter = new ImagesAdapter (
                 newGalleryActivity.this,
-                R.layout.new_gallery_listview_row,
-                filesArray
+            R.layout.new_gallery_listview_row,
+            filesArray
         );
 
         ListView listView = findViewById(R.id.newGalleryListView);
         listView.invalidateViews();
 
         listView.setAdapter(adapter);
-    }
-
-    private Bitmap betterImageDecode(String filePath) {
-        Bitmap myBitmap;
-        BitmapFactory.Options options = new BitmapFactory.Options();    //opcje przekształcania bitmapy
-        options.inSampleSize = 4; // zmniejszenie jakości bitmapy 4x
-        //
-        myBitmap = BitmapFactory.decodeFile(filePath, options);
-        return myBitmap;
     }
 
     @Override
