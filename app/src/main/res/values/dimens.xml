@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="mainViewImageSize">100dp</dimen>
+    <dimen name="mainViewTextSize">20sp</dimen>
+    <dimen name="mainViewTextLineHeight">25sp</dimen>
+    <dimen name="mainViewProgressBarSize">64dp</dimen>
+    <dimen name="mainViewArrowSize">64dp</dimen>
+    <dimen name="albumsListViewSize">100dp</dimen>
+    <dimen name="albumsAddButtonSize">100dp</dimen>
+</resources>

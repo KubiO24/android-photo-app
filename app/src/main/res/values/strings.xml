@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Kubus001</string>
+    <string name="camera_string">camera</string>
+    <string name="albums_string">albums</string>
+    <string name="collage_string">collage</string>
+    <string name="network_string">network</string>
+    <string name="newAlbums_string">albums new</string>
+</resources>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:background="@color/black">
+
+    <ImageView
+        android:layout_width="@dimen/albumsListViewSize"
+        android:layout_height="@dimen/albumsListViewSize"
+        android:src="@drawable/ic_baseline_image_24"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/albumsListViewSize"
+        android:textColor="@color/white"
+        android:id="@+id/newAlbumsListView_text"
+        android:gravity="center"
+        android:textSize="@dimen/mainViewTextSize"
+        android:text="test"
+        />
+
+</LinearLayout>

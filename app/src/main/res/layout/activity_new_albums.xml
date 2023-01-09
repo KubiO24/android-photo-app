@@ -1,0 +1,25 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:orientation="vertical"
+    android:weightSum="3"
+    android:background="@color/background"
+    >
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/newAlbumsListView"
+        />
+
+    <ImageView
+        android:layout_width="@dimen/albumsAddButtonSize"
+        android:layout_height="@dimen/albumsAddButtonSize"
+        android:src="@drawable/ic_baseline_add_24"
+        android:layout_centerInParent="true"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/newAlbumsAddButton"
+        />
+</RelativeLayout>
