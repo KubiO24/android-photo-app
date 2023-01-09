@@ -41,7 +41,9 @@ public class GalleryActivity extends AppCompatActivity {
             ImageView imageView = new ImageView(this);
             linearLayout.addView(imageView);
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 700));
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 500);
+            params.setMargins(0, 0, 0, 20);
+            imageView.setLayoutParams(params);
 
             //jeśli File jest plikiem
             String imagepath = file.getPath();                               // pobierz scieżkę z obiektu File
