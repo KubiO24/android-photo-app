@@ -9,6 +9,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -52,6 +54,42 @@ public class CollageMakerActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         if(actionBar != null) actionBar.setDisplayHomeAsUpEnabled(true);
 
+        ImageView flip = findViewById(R.id.collageFlip);
+        flip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Matrix matrix = new Matrix();
+                matrix.postScale(-1.0f, 1.0f);
+
+                Bitmap oryginal = ((BitmapDrawable) selectedIv.getDrawable()).getBitmap();
+                Bitmap rotated = Bitmap.createBitmap(oryginal, 0, 0, oryginal.getWidth(), oryginal.getHeight(), matrix, true);
+
+                selectedIv.setImageBitmap(rotated);
+            }
+        });
+
+        ImageView rotate = findViewById(R.id.collageRotate);
+        rotate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Matrix matrix = new Matrix();
+                matrix.postRotate(90);
+
+                Bitmap oryginal = ((BitmapDrawable) selectedIv.getDrawable()).getBitmap();
+                Bitmap rotated = Bitmap.createBitmap(oryginal, 0, 0, oryginal.getWidth(), oryginal.getHeight(), matrix, true);
+
+                selectedIv.setImageBitmap(rotated);
+            }
+        });
+
+        ImageView done = findViewById(R.id.collageDone);
+        done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("XXX", "done");
+            }
+        });
+
         ArrayList<ImageData> list = (ArrayList<ImageData>) getIntent().getSerializableExtra("list");
 
         FrameLayout fL = (FrameLayout)findViewById(R.id.frameLayout);
@@ -66,6 +104,8 @@ public class CollageMakerActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     selectedIv = iv;
+                    // return if image is already assinged
+                    if(selectedIv.getDrawable().getConstantState() != getResources().getDrawable(R.drawable.ic_baseline_add_photo_alternate_24).getConstantState()) return;
                     AlertDialog.Builder builder = new AlertDialog.Builder(CollageMakerActivity.this);
                     AlertDialog alert = builder.create();
                     alert.setTitle("Wybierz źródło zdjęcia!");
