@@ -6,6 +6,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -23,6 +24,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -54,10 +56,15 @@ public class CollageMakerActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         if(actionBar != null) actionBar.setDisplayHomeAsUpEnabled(true);
 
+        ArrayList<ImageData> list = (ArrayList<ImageData>) getIntent().getSerializableExtra("list");
+        FrameLayout fL = (FrameLayout)findViewById(R.id.frameLayout);
         ImageView flip = findViewById(R.id.collageFlip);
-        flip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        ImageView rotate = findViewById(R.id.collageRotate);
+        ImageView done = findViewById(R.id.collageDone);
+
+        fL.setDrawingCacheEnabled(true);
+
+        flip.setOnClickListener( v -> {
                 Matrix matrix = new Matrix();
                 matrix.postScale(-1.0f, 1.0f);
 
@@ -66,12 +73,9 @@ public class CollageMakerActivity extends AppCompatActivity {
 
                 selectedIv.setImageBitmap(rotated);
             }
-        });
+        );
 
-        ImageView rotate = findViewById(R.id.collageRotate);
-        rotate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        rotate.setOnClickListener( v -> {
                 Matrix matrix = new Matrix();
                 matrix.postRotate(90);
 
@@ -80,19 +84,50 @@ public class CollageMakerActivity extends AppCompatActivity {
 
                 selectedIv.setImageBitmap(rotated);
             }
-        });
+        );
 
-        ImageView done = findViewById(R.id.collageDone);
-        done.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d("XXX", "done");
+        done.setOnClickListener( v -> {
+            Bitmap b = fL.getDrawingCache(true);
+
+            // Utworznie folderu collages
+            File mainDir = Environment.getExternalStoragePublicDirectory( Environment.DIRECTORY_PICTURES );
+            File dir = new File(mainDir + "/JakubKowal", "collages");
+            dir.mkdir();
+
+            // konwersja danych typu Bitmap na zapisywalną do pliku tablicę byte[]
+            ByteArrayOutputStream byteArrayStream = new ByteArrayOutputStream();
+            b.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayStream); // kompresja, typ pliku jpg, png
+            byte[] byteArray = byteArrayStream.toByteArray();
+
+            // nazwa zdjęcia - data bieżąca
+            SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd_HHmmss");
+            String currentData = df.format(new Date());
+
+            //  zapis danych byte[] do pliku na urządzeniu
+            FileOutputStream fs = null;
+            File collagesDir = Environment.getExternalStoragePublicDirectory( Environment.DIRECTORY_PICTURES + "/JakubKowal/collages/" + currentData + ".jpg" );
+
+            try {
+                fs = new FileOutputStream(collagesDir);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
             }
+            try {
+                fs.write(byteArray);
+                fs.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            Context context = getApplicationContext();
+            CharSequence text = "Collage saved";
+            int duration = Toast.LENGTH_SHORT;
+
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
         });
 
-        ArrayList<ImageData> list = (ArrayList<ImageData>) getIntent().getSerializableExtra("list");
 
-        FrameLayout fL = (FrameLayout)findViewById(R.id.frameLayout);
         for (ImageData img : list) {
             ImageView iv = new ImageView(this);
             iv.setImageResource(R.drawable.ic_baseline_add_photo_alternate_24);
@@ -104,8 +139,10 @@ public class CollageMakerActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     selectedIv = iv;
+
                     // return if image is already assinged
                     if(selectedIv.getDrawable().getConstantState() != getResources().getDrawable(R.drawable.ic_baseline_add_photo_alternate_24).getConstantState()) return;
+
                     AlertDialog.Builder builder = new AlertDialog.Builder(CollageMakerActivity.this);
                     AlertDialog alert = builder.create();
                     alert.setTitle("Wybierz źródło zdjęcia!");
