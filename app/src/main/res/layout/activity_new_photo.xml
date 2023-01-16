@@ -9,17 +9,21 @@
 
     <ImageView
         android:id="@+id/newPhotoImageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
+        android:scaleType="centerCrop"
         />
 
     <RelativeLayout
+        android:id="@+id/photoControls"
         android:layout_width="match_parent"
         android:layout_height="70dp"
         android:layout_alignParentBottom="true"
-        android:background="#80000000">
+        android:background="#80000000"
+        android:translationY="70dp"
+        >
         <ImageView
             android:id="@+id/newPhotoBack"
             android:layout_width="70dp"

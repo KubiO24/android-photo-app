@@ -6,12 +6,14 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 public class NewPhotoActivity extends AppCompatActivity {
-    boolean x = true;
+    boolean showControls = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,22 +24,19 @@ public class NewPhotoActivity extends AppCompatActivity {
         String imagepath = myIntent.getStringExtra("imagepath") ;
         Bitmap bmp = betterImageDecode(imagepath);    // własna funkcja betterImageDecode opisana jest poniżej
 
+        RelativeLayout controls = findViewById(R.id.photoControls);
         ImageView image = findViewById(R.id.newPhotoImageView);
-        image.setScaleType(ImageView.ScaleType.CENTER_CROP);
         image.setImageBitmap(bmp);
         image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!x){
-                    image.getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
-                    image.getLayoutParams().height = LinearLayout.LayoutParams.WRAP_CONTENT;
-                    image.requestLayout();
-                    x = true;
+                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) controls.getLayoutParams();
+                if(showControls){
+                    controls.animate().translationY(convertDpToPx(80));
+                    showControls = false;
                 }else{
-                    image.getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
-                    image.getLayoutParams().height = LinearLayout.LayoutParams.MATCH_PARENT;
-                    image.requestLayout();
-                    x = false;
+                    controls.animate().translationY(0);
+                    showControls = true;
                 }
             }
         });
@@ -58,5 +57,9 @@ public class NewPhotoActivity extends AppCompatActivity {
         //
         myBitmap = BitmapFactory.decodeFile(filePath, options);
         return myBitmap;
+    }
+
+    private int convertDpToPx(int dp){
+        return Math.round(dp*(getResources().getDisplayMetrics().xdpi/DisplayMetrics.DENSITY_DEFAULT));
     }
 }
