@@ -75,6 +75,22 @@ public class NewPhotoActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        ImageView revert = findViewById(R.id.newPhotoRevert);
+        revert.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("XXX", "revert");
+            }
+        });
+
+        ImageView upload = findViewById(R.id.newPhotoUpload);
+        upload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("XXX", "upload");
+            }
+        });
     }
 
     private Bitmap betterImageDecode(String filePath) {
