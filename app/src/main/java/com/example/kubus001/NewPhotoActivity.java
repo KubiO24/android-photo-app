@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -24,20 +25,46 @@ public class NewPhotoActivity extends AppCompatActivity {
         String imagepath = myIntent.getStringExtra("imagepath") ;
         Bitmap bmp = betterImageDecode(imagepath);    // własna funkcja betterImageDecode opisana jest poniżej
 
+        RelativeLayout settings = findViewById(R.id.photoSettings);
         RelativeLayout controls = findViewById(R.id.photoControls);
         ImageView image = findViewById(R.id.newPhotoImageView);
         image.setImageBitmap(bmp);
         image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) controls.getLayoutParams();
                 if(showControls){
-                    controls.animate().translationY(convertDpToPx(80));
+                    settings.animate().translationY(convertDpToPx(-80));
+                    controls.animate().translationY(convertDpToPx(90));
                     showControls = false;
                 }else{
-                    controls.animate().translationY(0);
+                    settings.animate().translationY(0);
+                    controls.animate().translationY(convertDpToPx(10));
                     showControls = true;
                 }
+            }
+        });
+
+        ImageView brightness = findViewById(R.id.newPhotoBrightness);
+        brightness.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("XXX", "brightness");
+            }
+        });
+
+        ImageView contrast = findViewById(R.id.newPhotoContrast);
+        contrast.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("XXX", "contrast");
+            }
+        });
+
+        ImageView saturation = findViewById(R.id.newPhotoSaturation);
+        saturation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("XXX", "saturation");
             }
         });
 

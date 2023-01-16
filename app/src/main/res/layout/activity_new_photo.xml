@@ -17,12 +17,47 @@
         />
 
     <RelativeLayout
-        android:id="@+id/photoControls"
+        android:id="@+id/photoSettings"
         android:layout_width="match_parent"
         android:layout_height="70dp"
+        android:layout_alignParentTop="true"
+        android:background="#80000000"
+        android:translationY="-80dp"
+        >
+        <ImageView
+            android:id="@+id/newPhotoBrightness"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="40dp"
+            android:background="@drawable/ic_baseline_brightness_6_24"
+            />
+
+        <ImageView
+            android:id="@+id/newPhotoContrast"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/ic_baseline_contrast_24"
+            />
+
+        <ImageView
+            android:id="@+id/newPhotoSaturation"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="40dp"
+            android:background="@drawable/ic_baseline_invert_colors_24"
+            />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/photoControls"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
         android:layout_alignParentBottom="true"
         android:background="#80000000"
-        android:translationY="70dp"
+        android:translationY="80dp"
         >
         <ImageView
             android:id="@+id/newPhotoBack"
