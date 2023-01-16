@@ -19,7 +19,7 @@ import android.widget.ListView;
 
 import java.io.File;
 
-public class newAlbumsActivity extends AppCompatActivity {
+public class NewAlbumsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +38,7 @@ public class newAlbumsActivity extends AppCompatActivity {
         ListView listView = findViewById(R.id.newAlbumsListView);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                newAlbumsActivity.this,       // tzw Context
+                NewAlbumsActivity.this,       // tzw Context
                 R.layout.newlistview_row,     // nazwa pliku xml naszego wiersza na liście
                 R.id.newAlbumsListView_text, // id pola txt w wierszu
                 dirArray );                 // tablica przechowująca testowe dane
@@ -50,7 +50,7 @@ public class newAlbumsActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 File mainDir = Environment.getExternalStoragePublicDirectory( Environment.DIRECTORY_PICTURES + "/JakubKowal" );
                 File[] files = mainDir.listFiles();
-                Intent intent = new Intent(newAlbumsActivity.this, newGalleryActivity.class);
+                Intent intent = new Intent(NewAlbumsActivity.this, NewGalleryActivity.class);
                 intent.putExtra("name", files[i].getName());
                 startActivity(intent);
             }
@@ -59,7 +59,7 @@ public class newAlbumsActivity extends AppCompatActivity {
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                AlertDialog.Builder alert = new AlertDialog.Builder(newAlbumsActivity.this);
+                AlertDialog.Builder alert = new AlertDialog.Builder(NewAlbumsActivity.this);
                 alert.setTitle("Usuwanie Folderu");
                 alert.setMessage("Czy na pewno usunąć?");
 
@@ -82,7 +82,7 @@ public class newAlbumsActivity extends AppCompatActivity {
                         ListView listView = findViewById(R.id.newAlbumsListView);
 
                         ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                                newAlbumsActivity.this,       // tzw Context
+                                NewAlbumsActivity.this,       // tzw Context
                                 R.layout.newlistview_row,     // nazwa pliku xml naszego wiersza na liście
                                 R.id.newAlbumsListView_text, // id pola txt w wierszu
                                 dirArray );                 // tablica przechowująca testowe dane
@@ -103,12 +103,12 @@ public class newAlbumsActivity extends AppCompatActivity {
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder alert = new AlertDialog.Builder(newAlbumsActivity.this);
+                AlertDialog.Builder alert = new AlertDialog.Builder(NewAlbumsActivity.this);
                 alert.setTitle("Nowy Folder");
                 alert.setMessage("Podaj nazwę nowego folderu:");
 
                 //input
-                EditText input = new EditText(newAlbumsActivity.this);
+                EditText input = new EditText(NewAlbumsActivity.this);
                 input.setText("test");
                 alert.setView(input);
 
@@ -128,7 +128,7 @@ public class newAlbumsActivity extends AppCompatActivity {
                         ListView listView = findViewById(R.id.newAlbumsListView);
 
                         ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                                newAlbumsActivity.this,       // tzw Context
+                                NewAlbumsActivity.this,       // tzw Context
                                 R.layout.newlistview_row,     // nazwa pliku xml naszego wiersza na liście
                                 R.id.newAlbumsListView_text, // id pola txt w wierszu
                                 dirArray );                 // tablica przechowująca testowe dane

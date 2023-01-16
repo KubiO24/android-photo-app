@@ -50,7 +50,7 @@ public class ImagesAdapter extends ArrayAdapter {
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(_context, PhotoActivity.class);
+                Intent intent = new Intent(_context, NewPhotoActivity.class);
                 intent.putExtra("imagepath", tempFile.getPath());
                 _context.startActivity(intent);
             }

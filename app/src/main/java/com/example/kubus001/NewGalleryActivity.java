@@ -5,18 +5,9 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import java.io.File;
@@ -24,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class newGalleryActivity extends AppCompatActivity {
+public class NewGalleryActivity extends AppCompatActivity {
     ImagesAdapter adapter;
 
     @Override
@@ -43,7 +34,7 @@ public class newGalleryActivity extends AppCompatActivity {
 
 
         adapter = new ImagesAdapter (
-                newGalleryActivity.this,
+                NewGalleryActivity.this,
             R.layout.new_gallery_listview_row,
             filesArray
         );

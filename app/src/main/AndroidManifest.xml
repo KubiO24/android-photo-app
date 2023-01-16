@@ -15,17 +15,20 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Kubus001">
         <activity
+            android:name=".NewPhotoActivity"
+            android:exported="true" />
+        <activity
             android:name=".CollageMakerActivity"
             android:exported="true" />
         <activity
-            android:name=".newGalleryActivity"
+            android:name=".NewGalleryActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".newAlbumsActivity"
+            android:name=".NewAlbumsActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
