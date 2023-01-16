@@ -25,32 +25,35 @@ public class PhotoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo);
 
-        ActionBar actionBar = getSupportActionBar();
-        assert actionBar != null;
-        actionBar.setDisplayHomeAsUpEnabled(true);
-
         Intent myIntent = getIntent();
         String imagepath = myIntent.getStringExtra("imagepath") ;
         Bitmap bmp = betterImageDecode(imagepath);    // własna funkcja betterImageDecode opisana jest poniżej
 
-        ImageView imageView = findViewById(R.id.photoImageView);
-        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        imageView.setImageBitmap(bmp);
-
-        imageView.setOnClickListener(new View.OnClickListener() {
+        ImageView image = findViewById(R.id.photoImageView);
+        image.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        image.setImageBitmap(bmp);
+        image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(!x){
-                    imageView.getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
-                    imageView.getLayoutParams().height = LinearLayout.LayoutParams.WRAP_CONTENT;
-                    imageView.requestLayout();
+                    image.getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
+                    image.getLayoutParams().height = LinearLayout.LayoutParams.WRAP_CONTENT;
+                    image.requestLayout();
                     x = true;
                 }else{
-                    imageView.getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
-                    imageView.getLayoutParams().height = LinearLayout.LayoutParams.MATCH_PARENT;
-                    imageView.requestLayout();
+                    image.getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
+                    image.getLayoutParams().height = LinearLayout.LayoutParams.MATCH_PARENT;
+                    image.requestLayout();
                     x = false;
                 }
+            }
+        });
+
+        ImageView back = findViewById(R.id.photoBack);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
             }
         });
     }
@@ -62,14 +65,5 @@ public class PhotoActivity extends AppCompatActivity {
         //
         myBitmap = BitmapFactory.decodeFile(filePath, options);
         return myBitmap;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            this.finish();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 }
