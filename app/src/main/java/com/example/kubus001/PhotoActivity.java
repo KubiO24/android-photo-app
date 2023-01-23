@@ -27,7 +27,7 @@ public class PhotoActivity extends AppCompatActivity {
 
         Intent myIntent = getIntent();
         String imagepath = myIntent.getStringExtra("imagepath") ;
-        Bitmap bmp = betterImageDecode(imagepath);    // własna funkcja betterImageDecode opisana jest poniżej
+        Bitmap bmp = betterImageDecode(imagepath); // własna funkcja betterImageDecode opisana jest poniżej
 
         ImageView image = findViewById(R.id.photoImageView);
         image.setScaleType(ImageView.ScaleType.CENTER_CROP);
@@ -60,7 +60,7 @@ public class PhotoActivity extends AppCompatActivity {
 
     private Bitmap betterImageDecode(String filePath) {
         Bitmap myBitmap;
-        BitmapFactory.Options options = new BitmapFactory.Options();    //opcje przekształcania bitmapy
+        BitmapFactory.Options options = new BitmapFactory.Options(); // opcje przekształcania bitmapy
         options.inSampleSize = 4; // zmniejszenie jakości bitmapy 4x
         //
         myBitmap = BitmapFactory.decodeFile(filePath, options);
