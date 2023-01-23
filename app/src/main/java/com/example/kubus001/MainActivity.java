@@ -40,6 +40,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Uprawnienia
+        checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, 100);
+        checkPermission(Manifest.permission.CAMERA, 101);
+
         cameraButton = findViewById(R.id.cameraButton);
         cameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,10 +130,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-        // Uprawnienia
-        checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, 100);
-        checkPermission(Manifest.permission.CAMERA, 100);
     }
 
     public void checkPermission(String permission, int requestCode) {
@@ -149,16 +149,13 @@ public class MainActivity extends AppCompatActivity {
 
         switch (requestCode) {
             case 100:
-                if (grantResults.length > 0 &&
-                        grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     //tak
                     createDir();
-                } else {
-                    //nie
                 }
+                checkPermission(Manifest.permission.CAMERA, 101);
                 break;
             case 101 :
-
                 break;
         }
     }
