@@ -6,15 +6,19 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -23,6 +27,12 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.amitshekhar.DebugDB;
+import com.android.volley.Request;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -31,16 +41,22 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 
 public class MainActivity extends AppCompatActivity {
     private LinearLayout cameraButton, albumsButton, collageButton, networkButton, notesButton, newAlbumsButton;
+    private ArrayList<Item> list = new ArrayList<>();
+    private RecyclerView recyclerView;
+    private RecAdapter adapter;
+    private RecyclerView.LayoutManager layoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         // Uprawnienia
         checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, 100);
@@ -48,6 +64,46 @@ public class MainActivity extends AppCompatActivity {
         checkPermission(Manifest.permission.INTERNET, 101);
         checkPermission(Manifest.permission.ACCESS_NETWORK_STATE, 101);
 
+
+        // Recycler View
+        recyclerView = findViewById(R.id.recyclerView);
+        layoutManager = new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false);
+        recyclerView.setLayoutManager(layoutManager);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+        String url = "http://" + preferences.getString("ip", null) + ":3000/json";
+
+        JsonArrayRequest jsonRequest = new JsonArrayRequest(
+                Request.Method.GET,
+                url,
+                null,
+                response -> {
+                    for (int i = 0; i < response.length(); i++) {
+                        try {
+                            JSONObject responseObj =  response.getJSONObject(i);
+
+                            Item listItem = new Item(
+                                    responseObj.getString("name"),
+                                    responseObj.getString("url"),
+                                    "czas zapisu: " + responseObj.getString("creationTime"),
+                                    "wielkość zdjęcia: " + responseObj.getString("size") + " B"
+                            );
+
+                            list.add(listItem);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    adapter = new RecAdapter(MainActivity.this, list);
+                    recyclerView.setAdapter(adapter);
+                },
+                error -> {
+                    Log.d("XXX", "error" + error.getMessage());
+                }
+        );
+        Volley.newRequestQueue(MainActivity.this).add(jsonRequest);
+
+        // buttons
         cameraButton = findViewById(R.id.cameraButton);
         cameraButton.setOnClickListener(new View.OnClickListener() {
             @Override

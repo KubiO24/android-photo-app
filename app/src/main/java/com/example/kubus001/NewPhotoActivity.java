@@ -224,7 +224,6 @@ public class NewPhotoActivity extends AppCompatActivity {
                                         Multipart multipart = new Multipart(NewPhotoActivity.this);
                                         multipart.addFile("image/jpeg", "file", imagepath, byteArray);
                                         String uploadAddress = "http://" + preferences.getString("ip", null) + ":3000/upload";
-                                        Log.d("XXX", uploadAddress);
                                         multipart.launchRequest(uploadAddress,
                                                 response -> {
                                                     pDialog.dismiss();
