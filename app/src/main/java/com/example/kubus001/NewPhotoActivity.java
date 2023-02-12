@@ -5,22 +5,27 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -127,6 +132,24 @@ public class NewPhotoActivity extends AppCompatActivity {
             }
         });
 
+
+        EditText ipEditText = findViewById(R.id.network_ip_editText);
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(NewPhotoActivity.this);
+
+        if (preferences.getString("ip", null) != null)
+            ipEditText.setText(preferences.getString("ip", null));
+
+        Button saveIpButton = findViewById(R.id.network_saveIp_button);
+        saveIpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString("ip", String.valueOf(ipEditText.getText()));
+                editor.commit();
+                Toast.makeText(NewPhotoActivity.this, "IP saved", Toast.LENGTH_SHORT).show();
+            }
+        });
         List<String> networkArray = new ArrayList<String>();
         networkArray.add("upload");
         networkArray.add("share");
