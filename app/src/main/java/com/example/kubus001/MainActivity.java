@@ -35,7 +35,7 @@ import java.util.Date;
 
 
 public class MainActivity extends AppCompatActivity {
-    private LinearLayout cameraButton, albumsButton, collageButton, networkButton, newAlbumsButton;
+    private LinearLayout cameraButton, albumsButton, collageButton, networkButton, notesButton, newAlbumsButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,6 +121,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, NetworkActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        notesButton = findViewById(R.id.notesButton);
+        notesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, NotesActivity.class);
                 startActivity(intent);
             }
         });
