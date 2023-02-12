@@ -97,7 +97,7 @@ public class ImagesAdapter extends ArrayAdapter {
                 EditText titleText = (EditText) editView.findViewById(R.id.titleText);
                 EditText textText = (EditText) editView.findViewById(R.id.textText);
 
-                final int[] selectedColor = {0xff000000};
+                final int[] selectedColor = {0xffffffff};
 
                 int[] colors = new int[]{0xff0099ff, 0xffff5100, 0xffeb2f58, 0xffa841d1, 0xfff765d0, 0xff7fe3bd, 0xff2fa134, 0xff074f0a};
                 LinearLayout colorsLayout = (LinearLayout) editView.findViewById(R.id.colorsLayout);
@@ -128,7 +128,7 @@ public class ImagesAdapter extends ArrayAdapter {
                         );
 
                         int color = selectedColor[0];
-                        db.insert( Integer.toHexString(color), titleText.getText().toString(), textText.getText().toString(), tempFile.getPath());
+                        db.insert( titleText.getText().toString(), textText.getText().toString(), Integer.toHexString(color), tempFile.getPath());
 
                     }
 
