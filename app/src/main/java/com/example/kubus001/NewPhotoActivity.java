@@ -163,8 +163,13 @@ public class NewPhotoActivity extends AppCompatActivity {
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(NewPhotoActivity.this);
 
-        if (preferences.getString("ip", null) != null)
+        if (preferences.getString("ip", null) != null) {
             ipEditText.setText(preferences.getString("ip", null));
+        }else {
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString("ip", "192.168.0.1");
+            editor.commit();
+        }
 
         Button saveIpButton = findViewById(R.id.network_saveIp_button);
         saveIpButton.setOnClickListener(new View.OnClickListener() {
@@ -218,13 +223,13 @@ public class NewPhotoActivity extends AppCompatActivity {
 
                                         Multipart multipart = new Multipart(NewPhotoActivity.this);
                                         multipart.addFile("image/jpeg", "file", imagepath, byteArray);
-                                        multipart.launchRequest("upload_url",
+                                        String uploadAddress = "http://" + preferences.getString("ip", null) + ":3000/upload";
+                                        Log.d("XXX", uploadAddress);
+                                        multipart.launchRequest(uploadAddress,
                                                 response -> {
-                                                    Log.d("xxx", "success");
                                                     pDialog.dismiss();
                                                 },
                                                 error -> {
-                                                    Log.d("xxx", "error");
                                                     pDialog.dismiss();
                                                 });
                                     }
