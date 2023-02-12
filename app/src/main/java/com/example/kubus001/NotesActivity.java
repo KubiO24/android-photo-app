@@ -127,7 +127,21 @@ public class NotesActivity extends AppCompatActivity {
                 colorSortButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Log.d("XXX", "color sort");
+                        ArrayList<Note> sortedDb = db.getAll();
+
+                        Collections.sort(sortedDb, new Comparator<Note>() {
+                            @Override
+                            public int compare(Note n1, Note n2) {
+                                return n1.getColor().compareTo(n2.getColor());
+                            }
+                        });
+
+                        NotesArrayAdapter adapter = new NotesArrayAdapter(
+                                NotesActivity.this,
+                                R.layout.notes_listview_row,
+                                sortedDb
+                        );
+                        notesListView.setAdapter(adapter);
                         alert.cancel();
                     }
                 });
