@@ -237,7 +237,7 @@ public class NewPhotoActivity extends AppCompatActivity {
                         Intent share = new Intent(Intent.ACTION_SEND);
                         share.setType("image/jpeg");
                         share.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://"+imagepath));
-                        startActivity(Intent.createChooser(share, "Podziel się plikiem!"));
+                        startActivity(Intent.createChooser(share, "Share this image!"));
                         break;
 
                     case 2:
