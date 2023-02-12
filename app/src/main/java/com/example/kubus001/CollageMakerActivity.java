@@ -38,6 +38,7 @@ import java.util.Date;
 
 public class CollageMakerActivity extends AppCompatActivity {
     private ImageView selectedIv;
+    private ArrayList<ImageView> setImageViews;
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -56,6 +57,8 @@ public class CollageMakerActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         if(actionBar != null) actionBar.setDisplayHomeAsUpEnabled(true);
 
+        setImageViews = new ArrayList<ImageView>();
+
         ArrayList<ImageData> list = (ArrayList<ImageData>) getIntent().getSerializableExtra("list");
         FrameLayout fL = (FrameLayout)findViewById(R.id.frameLayout);
         ImageView flip = findViewById(R.id.collageFlip);
@@ -64,29 +67,31 @@ public class CollageMakerActivity extends AppCompatActivity {
 
         fL.setDrawingCacheEnabled(true);
 
-        flip.setOnClickListener( v -> {
-                Matrix matrix = new Matrix();
-                matrix.postScale(-1.0f, 1.0f);
+        flip.setOnClickListener(v -> {
+            if(selectedIv == null) return;
 
-                Bitmap oryginal = ((BitmapDrawable) selectedIv.getDrawable()).getBitmap();
-                Bitmap rotated = Bitmap.createBitmap(oryginal, 0, 0, oryginal.getWidth(), oryginal.getHeight(), matrix, true);
+            Matrix matrix = new Matrix();
+            matrix.postScale(-1.0f, 1.0f);
 
-                selectedIv.setImageBitmap(rotated);
-            }
-        );
+            Bitmap oryginal = ((BitmapDrawable) selectedIv.getDrawable()).getBitmap();
+            Bitmap rotated = Bitmap.createBitmap(oryginal, 0, 0, oryginal.getWidth(), oryginal.getHeight(), matrix, true);
 
-        rotate.setOnClickListener( v -> {
-                Matrix matrix = new Matrix();
-                matrix.postRotate(90);
+            selectedIv.setImageBitmap(rotated);
+        });
 
-                Bitmap oryginal = ((BitmapDrawable) selectedIv.getDrawable()).getBitmap();
-                Bitmap rotated = Bitmap.createBitmap(oryginal, 0, 0, oryginal.getWidth(), oryginal.getHeight(), matrix, true);
+        rotate.setOnClickListener(v -> {
+            if(selectedIv == null) return;
 
-                selectedIv.setImageBitmap(rotated);
-            }
-        );
+            Matrix matrix = new Matrix();
+            matrix.postRotate(90);
 
-        done.setOnClickListener( v -> {
+            Bitmap oryginal = ((BitmapDrawable) selectedIv.getDrawable()).getBitmap();
+            Bitmap rotated = Bitmap.createBitmap(oryginal, 0, 0, oryginal.getWidth(), oryginal.getHeight(), matrix, true);
+
+            selectedIv.setImageBitmap(rotated);
+        });
+
+        done.setOnClickListener(v -> {
             Bitmap b = fL.getDrawingCache(true);
 
             // Utworznie folderu collages
@@ -140,8 +145,7 @@ public class CollageMakerActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     selectedIv = iv;
 
-                    // return if image is already assinged
-                    if(selectedIv.getDrawable().getConstantState() != getResources().getDrawable(R.drawable.ic_baseline_add_photo_alternate_24).getConstantState()) return;
+                    if(setImageViews.contains(selectedIv)) return;
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(CollageMakerActivity.this);
                     AlertDialog alert = builder.create();
@@ -222,5 +226,7 @@ public class CollageMakerActivity extends AppCompatActivity {
                 selectedIv.setScaleType(ImageView.ScaleType.CENTER_CROP);
             }
         }
+
+        setImageViews.add(selectedIv);
     }
 }
