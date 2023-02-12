@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,8 +13,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
+import android.os.StrictMode;
 import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -31,6 +35,13 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bikomobile.multipart.Multipart;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -42,14 +53,23 @@ public class NewPhotoActivity extends AppCompatActivity {
     String selectedEffect;
     Bitmap originalBitmap;
     SeekBar seekBar;
+    ProgressDialog pDialog;
+    String imagepath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_photo);
 
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
+
+        pDialog = new ProgressDialog(NewPhotoActivity.this);
+        pDialog.setMessage("Wysyłanie zdjęcia na serwer");
+        pDialog.setCancelable(false); // nie da się zamknąć klikając w ekran
+
         Intent myIntent = getIntent();
-        String imagepath = myIntent.getStringExtra("imagepath") ;
+        imagepath = myIntent.getStringExtra("imagepath") ;
         originalBitmap = betterImageDecode(imagepath);    // własna funkcja betterImageDecode opisana jest poniżej
 
         RelativeLayout settings = findViewById(R.id.photoSettings);
@@ -172,18 +192,58 @@ public class NewPhotoActivity extends AppCompatActivity {
         networkListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Log.d("XXX", String.valueOf(i));
-                Log.d("XXX", String.valueOf(l));
+                switch(i) {
+                    case 0:
+                        if(!Networking.isConnectedToWifi(NewPhotoActivity.this)) {
+                            new AlertDialog.Builder(NewPhotoActivity.this)
+                                    .setTitle("Brak internetu")
+                                    .setMessage("Nie można wysłać zdjęcia na serwer")
+                                    .setPositiveButton("Ok", null)
+                                    .show();
+                            return;
+                        }
 
-                if(!Networking.isConnectedToWifi(NewPhotoActivity.this)) {
-                    new AlertDialog.Builder(NewPhotoActivity.this)
-                        .setTitle("Brak internetu")
-                        .setMessage("Nie można wysłać zdjęcia na serwer")
-                        .setPositiveButton("Ok", null)
-                        .show();
-                    return;
+                        new AlertDialog.Builder(NewPhotoActivity.this)
+                                .setTitle("Upload")
+                                .setMessage("Czy wysłać zdjęcie?")
+
+                                .setPositiveButton("Tak", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        pDialog.show();
+
+                                        Bitmap bmp = ((BitmapDrawable)image.getDrawable()).getBitmap();
+                                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                                        bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                                        byte[] byteArray = stream.toByteArray();
+
+                                        Multipart multipart = new Multipart(NewPhotoActivity.this);
+                                        multipart.addFile("image/jpeg", "file", imagepath, byteArray);
+                                        multipart.launchRequest("upload_url",
+                                                response -> {
+                                                    Log.d("xxx", "success");
+                                                    pDialog.dismiss();
+                                                },
+                                                error -> {
+                                                    Log.d("xxx", "error");
+                                                    pDialog.dismiss();
+                                                });
+                                    }
+                                })
+                                .setNegativeButton("Nie", null)
+                                .show();
+                        break;
+
+                    case 1:
+                        Intent share = new Intent(Intent.ACTION_SEND);
+                        share.setType("image/jpeg");
+                        share.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://"+imagepath));
+                        startActivity(Intent.createChooser(share, "Podziel się plikiem!"));
+                        break;
+
+                    case 2:
+                        // crop
+                        break;
                 }
-
             }
         });
     }
