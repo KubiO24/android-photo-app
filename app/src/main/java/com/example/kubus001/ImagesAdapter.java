@@ -4,6 +4,7 @@ package com.example.kubus001;
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -89,43 +90,29 @@ public class ImagesAdapter extends ArrayAdapter {
             @Override
             public void onClick(View view) {
                 AlertDialog.Builder alert = new AlertDialog.Builder(_context);
-                alert.setTitle("Uwaga!");
-                alert.setMessage("komunikat");
+                View editView = View.inflate(_context, R.layout.note_inputs, null);
+                alert.setView(editView);
 
-                LinearLayout ll = new LinearLayout(_context);
-                ll.setOrientation(LinearLayout.VERTICAL);
-
-                EditText title = new EditText(_context);
-                title.setText("tytyl notatki");
-
-                EditText noteContent = new EditText(_context);
-                noteContent.setText("tresc notatki");
-
-                ll.addView(title);
-                ll.addView(noteContent);
-
-                alert.setView(ll);
+                EditText titleText = (EditText) editView.findViewById(R.id.titleText);
 
                 final int[] selectedColor = {0xff000000};
 
-                int[] arr = new int[]{0xff0099ff, 0xffff5100, 0xffeb2f58, 0xffa841d1, 0xfff765d0, 0xff7fe3bd, 0xff2fa134, 0xff074f0a};
-                LinearLayout colors = new LinearLayout(_context);
-                colors.setOrientation(LinearLayout.HORIZONTAL);
-                for(int i :arr){
+                int[] colors = new int[]{0xff0099ff, 0xffff5100, 0xffeb2f58, 0xffa841d1, 0xfff765d0, 0xff7fe3bd, 0xff2fa134, 0xff074f0a};
+                LinearLayout colorsLayout = (LinearLayout) editView.findViewById(R.id.colorsLayout);
+                for(int i :colors){
                     ImageView x = new ImageView(_context);
                     LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(100, 100);
                     x.setLayoutParams(layoutParams);
                     x.setBackgroundColor(i);
-                    colors.addView(x);
+                    colorsLayout.addView(x);
                     x.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             selectedColor[0] = i;
-                            title.setTextColor(selectedColor[0]);
+                            titleText.setTextColor(selectedColor[0]);
                         }
                     });
                 }
-                ll.addView(colors);
 
                 alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
@@ -144,13 +131,12 @@ public class ImagesAdapter extends ArrayAdapter {
 
                 });
 
-//no
                 alert.setNegativeButton("NO", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        //wyświetl which
+
                     }
                 });
-//
+
                 alert.show();
             }
         });
