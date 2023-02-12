@@ -15,6 +15,10 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
 public class NotesActivity extends AppCompatActivity {
 
     @Override
@@ -97,7 +101,21 @@ public class NotesActivity extends AppCompatActivity {
                 titleSortButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Log.d("XXX", "title sort");
+                        ArrayList<Note> sortedDb = db.getAll();
+
+                        Collections.sort(sortedDb, new Comparator<Note>() {
+                            @Override
+                            public int compare(Note n1, Note n2) {
+                                return n1.getTitle().compareTo(n2.getTitle());
+                            }
+                        });
+
+                        NotesArrayAdapter adapter = new NotesArrayAdapter(
+                                NotesActivity.this,
+                                R.layout.notes_listview_row,
+                                sortedDb
+                        );
+                        notesListView.setAdapter(adapter);
                         alert.cancel();
                     }
                 });
