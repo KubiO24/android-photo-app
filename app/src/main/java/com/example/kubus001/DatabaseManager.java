@@ -6,7 +6,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -29,7 +28,6 @@ public class DatabaseManager extends SQLiteOpenHelper {
     }
 
     public boolean insert(String title, String text, String color, String path){
-
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
@@ -41,6 +39,14 @@ public class DatabaseManager extends SQLiteOpenHelper {
         db.insertOrThrow("notes", null, contentValues); // gdy insert się nie powiedzie, będzie błąd
         db.close();
         return true;
+    }
+
+    public int delete(String id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        return db.delete("notes",
+                "_id = ? ",
+                new String[]{id});
     }
 
     @SuppressLint("Range")

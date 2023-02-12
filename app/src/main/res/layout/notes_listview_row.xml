@@ -3,7 +3,8 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="150dp"
-    android:layout_marginBottom="10dp">
+    android:layout_marginBottom="10dp"
+    android:id="@+id/note_layout">
     <LinearLayout
         android:layout_width="150dp"
         android:layout_height="150dp"
