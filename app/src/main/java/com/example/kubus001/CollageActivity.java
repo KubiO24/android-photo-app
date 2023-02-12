@@ -63,9 +63,9 @@ public class CollageActivity extends AppCompatActivity {
 
                 list.clear();
                 list.add(new ImageData(0,0,size.x/3*2,size.y));
-                list.add(new ImageData(size.y/3+50,0,size.x/3,size.y/3));
-                list.add(new ImageData(size.y/3+50,size.y/3,size.x/3,size.y/3));
-                list.add(new ImageData(size.y/3+50,size.y/3*2,size.x/3,size.y/3));
+                list.add(new ImageData(size.x/3*2,0,size.x/3,size.y/3));
+                list.add(new ImageData(size.x/3*2,size.y/3,size.x/3,size.y/3));
+                list.add(new ImageData(size.x/3*2,size.y/3*2,size.x/3,size.y/3));
                 intent.putExtra("list", list);
 
                 startActivity(intent);
