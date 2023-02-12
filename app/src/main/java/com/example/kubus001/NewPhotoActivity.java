@@ -1,6 +1,8 @@
 package com.example.kubus001;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -15,9 +17,13 @@ import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class NewPhotoActivity extends AppCompatActivity {
     boolean showControls = false;
@@ -116,9 +122,23 @@ public class NewPhotoActivity extends AppCompatActivity {
         upload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("XXX", "upload");
+                DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+                drawerLayout.openDrawer(GravityCompat.START);
             }
         });
+
+        List<String> networkArray = new ArrayList<String>();
+        networkArray.add("upload");
+        networkArray.add("share");
+        networkArray.add("crop");
+
+        NetworkArrayAdapter adapter = new NetworkArrayAdapter(
+                NewPhotoActivity.this,
+                R.layout.network_listview_row,
+                networkArray
+        );
+        ListView networkListView = findViewById(R.id.network_listView);
+        networkListView.setAdapter(adapter);
     }
 
     private Bitmap betterImageDecode(String filePath) {
