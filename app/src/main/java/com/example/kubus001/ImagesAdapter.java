@@ -8,6 +8,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -94,6 +95,7 @@ public class ImagesAdapter extends ArrayAdapter {
                 alert.setView(editView);
 
                 EditText titleText = (EditText) editView.findViewById(R.id.titleText);
+                EditText textText = (EditText) editView.findViewById(R.id.textText);
 
                 final int[] selectedColor = {0xff000000};
 
@@ -110,6 +112,7 @@ public class ImagesAdapter extends ArrayAdapter {
                         public void onClick(View view) {
                             selectedColor[0] = i;
                             titleText.setTextColor(selectedColor[0]);
+                            titleText.getBackground().mutate().setColorFilter(selectedColor[0], PorterDuff.Mode.SRC_ATOP);
                         }
                     });
                 }
@@ -117,15 +120,15 @@ public class ImagesAdapter extends ArrayAdapter {
                 alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
 
-//                        DatabaseManager db = new DatabaseManager (
-//                                _context, // activity z galerią zdjęć
-//                                "NotatkiWojdylaArkadiusz.db", // nazwa bazy
-//                                null,
-//                                1 //wersja bazy, po zmianie schematu bazy należy ją zwiększyć
-//                        );
-//
-//                        int color = selectedColor[0];
-//                        db.insertNote( Integer.toHexString(color), title.getText().toString(), noteContent.getText().toString(), tempFile.getPath());
+                        DatabaseManager db = new DatabaseManager (
+                                _context, // activity z galerią zdjęć
+                                "NotatkiJakubKowal.db", // nazwa bazy
+                                null,
+                                1 //wersja bazy, po zmianie schematu bazy należy ją zwiększyć
+                        );
+
+                        int color = selectedColor[0];
+                        db.insert( Integer.toHexString(color), titleText.getText().toString(), textText.getText().toString(), tempFile.getPath());
 
                     }
 
