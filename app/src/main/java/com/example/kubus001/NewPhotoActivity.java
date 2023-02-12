@@ -1,13 +1,16 @@
 package com.example.kubus001;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,6 +20,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -28,6 +32,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class NewPhotoActivity extends AppCompatActivity {
@@ -162,6 +168,24 @@ public class NewPhotoActivity extends AppCompatActivity {
         );
         ListView networkListView = findViewById(R.id.network_listView);
         networkListView.setAdapter(adapter);
+
+        networkListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Log.d("XXX", String.valueOf(i));
+                Log.d("XXX", String.valueOf(l));
+
+                if(!Networking.isConnectedToWifi(NewPhotoActivity.this)) {
+                    new AlertDialog.Builder(NewPhotoActivity.this)
+                        .setTitle("Brak internetu")
+                        .setMessage("Nie można wysłać zdjęcia na serwer")
+                        .setPositiveButton("Ok", null)
+                        .show();
+                    return;
+                }
+
+            }
+        });
     }
 
     private Bitmap betterImageDecode(String filePath) {

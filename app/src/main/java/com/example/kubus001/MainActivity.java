@@ -46,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
         // Uprawnienia
         checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, 100);
         checkPermission(Manifest.permission.CAMERA, 101);
+        checkPermission(Manifest.permission.INTERNET, 101);
+        checkPermission(Manifest.permission.ACCESS_NETWORK_STATE, 101);
 
         cameraButton = findViewById(R.id.cameraButton);
         cameraButton.setOnClickListener(new View.OnClickListener() {
@@ -167,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 checkPermission(Manifest.permission.CAMERA, 101);
                 break;
-            case 101 :
+            case 101:
                 break;
         }
     }

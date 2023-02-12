@@ -60,7 +60,6 @@ public class NotesActivity extends AppCompatActivity {
                 alert.setView(alertView);
                 alertView.setOrientation(LinearLayout.VERTICAL);
 
-
                 Button editButton = new Button(NotesActivity.this);
                 editButton.setBackgroundResource(0);
                 editButton.setText("edytuj");
