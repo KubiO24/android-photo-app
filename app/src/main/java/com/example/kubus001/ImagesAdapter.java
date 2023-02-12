@@ -87,7 +87,6 @@ public class ImagesAdapter extends ArrayAdapter {
 
         ImageView editbt = (ImageView) convertView.findViewById(R.id.listView_editBtn);
         editbt.setOnClickListener(new View.OnClickListener() {
-            @SuppressLint("ResourceAsColor")
             @Override
             public void onClick(View view) {
                 AlertDialog.Builder alert = new AlertDialog.Builder(_context);

@@ -49,6 +49,21 @@ public class DatabaseManager extends SQLiteOpenHelper {
                 new String[]{id});
     }
 
+    public void edit(String id, String title, String text, String color) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("title", title);
+        contentValues.put("text", text);
+        contentValues.put("color", color);
+
+        db.update("notes",
+                contentValues,
+                "_id = ? ",
+                new String[]{id}); // chodzi o id w tej linii
+        db.close();
+    }
+
     @SuppressLint("Range")
     public ArrayList<Note> getAll(){
         SQLiteDatabase db = this.getReadableDatabase();

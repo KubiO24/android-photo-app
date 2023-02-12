@@ -5,6 +5,8 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -12,6 +14,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
@@ -63,8 +67,73 @@ public class NotesActivity extends AppCompatActivity {
                 editButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Log.d("XXX", "edit");
                         alert.cancel();
+
+                        String oldTitle = db.getAll().get(i).getTitle();
+                        String oldText = db.getAll().get(i).getText();
+                        String oldColor = db.getAll().get(i).getColor();
+
+                        android.app.AlertDialog.Builder alert = new android.app.AlertDialog.Builder(NotesActivity.this);
+                        View editView = View.inflate(NotesActivity.this, R.layout.note_inputs, null);
+                        alert.setView(editView);
+
+                        EditText titleText = (EditText) editView.findViewById(R.id.titleText);
+                        titleText.setText(oldTitle);
+
+                        EditText textText = (EditText) editView.findViewById(R.id.textText);
+                        textText.setText(oldText);
+
+                        final int[] selectedColor = {(int) Long.parseLong(oldColor, 16)};
+                        titleText.setTextColor(selectedColor[0]);
+                        titleText.getBackground().mutate().setColorFilter(selectedColor[0], PorterDuff.Mode.SRC_ATOP);
+
+                        int[] colors = new int[]{0xff0099ff, 0xffff5100, 0xffeb2f58, 0xffa841d1, 0xfff765d0, 0xff7fe3bd, 0xff2fa134, 0xff074f0a};
+                        LinearLayout colorsLayout = (LinearLayout) editView.findViewById(R.id.colorsLayout);
+
+                        for(int color :colors){
+                            ImageView x = new ImageView(NotesActivity.this);
+                            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(100, 100);
+                            x.setLayoutParams(layoutParams);
+                            x.setBackgroundColor(color);
+                            colorsLayout.addView(x);
+                            x.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    selectedColor[0] = color;
+                                    titleText.setTextColor(selectedColor[0]);
+                                    titleText.getBackground().mutate().setColorFilter(selectedColor[0], PorterDuff.Mode.SRC_ATOP);
+                                }
+                            });
+                        }
+
+                        alert.setPositiveButton("SAVE", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                String id = db.getAll().get(i).get_id();
+                                String title = titleText.getText().toString();
+                                String text = textText.getText().toString();
+                                String color = Integer.toHexString(selectedColor[0]);
+
+                                db.edit(id, title, text, color);
+
+                                NotesArrayAdapter adapter = new NotesArrayAdapter(
+                                        NotesActivity.this,
+                                        R.layout.notes_listview_row,
+                                        db.getAll()
+                                );
+                                notesListView.setAdapter(adapter);
+
+                                dialog.cancel();
+                            }
+
+                        });
+
+                        alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        });
+
+                        alert.show();
                     }
                 });
                 alertView.addView(editButton);
@@ -75,12 +144,6 @@ public class NotesActivity extends AppCompatActivity {
                 deleteButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        DatabaseManager db = new DatabaseManager (
-                                NotesActivity.this,
-                                "NotatkiJakubKowal.db",
-                                null,
-                                1
-                        );
                         db.delete(db.getAll().get(i).get_id());
 
                         NotesArrayAdapter adapter = new NotesArrayAdapter(
