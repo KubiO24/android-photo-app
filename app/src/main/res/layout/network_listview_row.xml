@@ -22,5 +22,6 @@
         android:layout_height="120dp"
         android:id="@+id/network_row_text"
         android:textSize="24dp"
+        android:textColor="@color/white"
         android:gravity="center"/>
 </LinearLayout>

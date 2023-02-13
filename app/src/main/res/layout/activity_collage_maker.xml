@@ -23,7 +23,7 @@
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="50dp"
             android:background="@drawable/ic_baseline_flip_24"
-            android:id="@+id/collageFlip"/>
+            android:id="@+id/collageFlip" />
         <ImageView
             android:layout_width="60dp"
             android:layout_height="60dp"

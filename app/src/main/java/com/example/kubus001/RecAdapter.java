@@ -43,7 +43,6 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHolder> {
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(_context);
         String url = "http://" + preferences.getString("ip", null) + ":3000" + listItem.getUrl();
-        Log.d("xxx", url);
 
         Picasso
             .get()

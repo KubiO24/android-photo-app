@@ -53,6 +53,13 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager layoutManager;
 
     @Override
+    public void onRestart() {
+        super.onRestart();
+
+        refreshRecycler();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -64,46 +71,10 @@ public class MainActivity extends AppCompatActivity {
         checkPermission(Manifest.permission.INTERNET, 101);
         checkPermission(Manifest.permission.ACCESS_NETWORK_STATE, 101);
 
-
         // Recycler View
-        recyclerView = findViewById(R.id.recyclerView);
-        layoutManager = new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false);
-        recyclerView.setLayoutManager(layoutManager);
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-        String url = "http://" + preferences.getString("ip", null) + ":3000/json";
+        refreshRecycler();
 
-        JsonArrayRequest jsonRequest = new JsonArrayRequest(
-                Request.Method.GET,
-                url,
-                null,
-                response -> {
-                    for (int i = 0; i < response.length(); i++) {
-                        try {
-                            JSONObject responseObj =  response.getJSONObject(i);
-
-                            Item listItem = new Item(
-                                    responseObj.getString("name"),
-                                    responseObj.getString("url"),
-                                    "czas zapisu: " + responseObj.getString("creationTime"),
-                                    "wielkość zdjęcia: " + responseObj.getString("size") + " B"
-                            );
-
-                            list.add(listItem);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    adapter = new RecAdapter(MainActivity.this, list);
-                    recyclerView.setAdapter(adapter);
-                },
-                error -> {
-                    Log.d("XXX", "error" + error.getMessage());
-                }
-        );
-        Volley.newRequestQueue(MainActivity.this).add(jsonRequest);
-
-        // buttons
+        // Buttons
         cameraButton = findViewById(R.id.cameraButton);
         cameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -137,8 +108,6 @@ public class MainActivity extends AppCompatActivity {
                 gallery.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Log.d("XXX", "galeria");
-
                         Intent intent = new Intent(Intent.ACTION_PICK);
                         intent.setType("image/*");
                         startActivityForResult(intent, 100); // 100 - stała wartość, która później posłuży do identyfikacji tej akcji
@@ -199,6 +168,45 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    private void refreshRecycler() {
+        recyclerView = findViewById(R.id.recyclerView);
+        layoutManager = new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false);
+        recyclerView.setLayoutManager(layoutManager);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+        String url = "http://" + preferences.getString("ip", null) + ":3000/json";
+
+        JsonArrayRequest jsonRequest = new JsonArrayRequest(
+                Request.Method.GET,
+                url,
+                null,
+                response -> {
+                    list.clear();
+                    for (int i = 0; i < response.length(); i++) {
+                        try {
+                            JSONObject responseObj =  response.getJSONObject(i);
+
+                            Item listItem = new Item(
+                                    responseObj.getString("name"),
+                                    responseObj.getString("url"),
+                                    "czas zapisu: " + responseObj.getString("creationTime"),
+                                    "wielkość zdjęcia: " + responseObj.getString("size") + " B"
+                            );
+
+                            list.add(listItem);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    adapter = new RecAdapter(MainActivity.this, list);
+                    recyclerView.setAdapter(adapter);
+                },
+                error -> {
+                    Log.d("XXX", "error" + error.getMessage());
+                }
+        );
+        Volley.newRequestQueue(MainActivity.this).add(jsonRequest);
     }
 
     public void checkPermission(String permission, int requestCode) {
