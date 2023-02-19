@@ -189,7 +189,6 @@ public class NewPhotoActivity extends AppCompatActivity {
         List<String> networkArray = new ArrayList<String>();
         networkArray.add("upload");
         networkArray.add("share");
-        networkArray.add("crop");
         networkArray.add("effects");
 
         NetworkArrayAdapter adapter = new NetworkArrayAdapter(
@@ -263,10 +262,6 @@ public class NewPhotoActivity extends AppCompatActivity {
                         break;
 
                     case 2:
-                        // crop
-                        break;
-
-                    case 3:
                         Bitmap b = ((BitmapDrawable) image.getDrawable()).getBitmap();
                         ImageEdition.myBitmap = b;
                         Intent intent = new Intent(NewPhotoActivity.this, EffectsActivity.class);
