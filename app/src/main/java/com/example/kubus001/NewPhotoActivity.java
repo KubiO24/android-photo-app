@@ -59,6 +59,7 @@ public class NewPhotoActivity extends AppCompatActivity {
     SeekBar seekBar;
     ProgressDialog pDialog;
     String imagepath;
+    Boolean isCrop = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -268,6 +269,59 @@ public class NewPhotoActivity extends AppCompatActivity {
                         startActivity(intent);
                         break;
                 }
+            }
+        });
+
+        RelativeLayout mainLayout = findViewById(R.id.newPhotoMainLayout);
+        MyImageView myImg = new MyImageView(this);
+        ImageView cropButton = findViewById(R.id.cropButton);
+        cropButton.setOnClickListener(v -> {
+            myImg.repaintAll();
+            seekBar.setAlpha(0f);
+            myImg.invalidate();
+            if(isCrop) {
+                return;
+            }
+            isCrop = true;
+
+            mainLayout.addView(myImg);
+        });
+
+        ImageView cropDone = findViewById(R.id.cropDone);
+        cropDone.setOnClickListener(v -> {
+            mainLayout.removeView(myImg);
+            isCrop = false;
+
+            Integer x = Math.round(myImg.startX);
+            Integer y = Math.round(myImg.startY);
+            Integer w = Math.round(myImg.endX - myImg.startX);
+            Integer h = Math.round(myImg.endY - myImg.startY);
+
+            Log.d("xxx", "x: " + x + " | y: " + y + " | w: " + w + " | h:" + h);
+
+            if(x>0 && y>0 && w>0 && h>0) {
+                DisplayMetrics displayMetrics = new DisplayMetrics();
+                getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+                Float screenHeight = (float) displayMetrics.heightPixels;
+                Float screenWidth = (float) displayMetrics.widthPixels;
+
+                Bitmap b = ((BitmapDrawable) image.getDrawable()).getBitmap();
+                Float imageWidth = (float) b.getWidth();
+                Float imageHeight = (float) b.getHeight();
+
+                Float ratioX = (float) (imageWidth / screenWidth);
+                Float ratioY = (float) (imageHeight / screenHeight);
+
+                int finalX = (int) (x * ratioX);
+                int finalY = (int) (y * ratioY);
+                int finalW = (int) (w * ratioX);
+                int finalH = (int) (h * ratioY);
+
+//                Log.d("xxx", "x: " + finalX + " | y: " + finalY + " | w: " + finalW + " | h: " + finalH);
+
+                Bitmap croppedBitmap = Bitmap.createBitmap(b, finalX, finalY, finalW, finalH);
+                image = findViewById(R.id.newPhotoImageView);
+                image.setImageBitmap(croppedBitmap);
             }
         });
     }

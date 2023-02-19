@@ -32,6 +32,7 @@
                 android:layout_alignParentTop="true"
                 android:background="#80000000"
                 android:translationY="-80dp"
+                android:translationZ="1dp"
                 >
                 <ImageView
                     android:id="@+id/newPhotoBrightness"
@@ -81,6 +82,7 @@
                 android:max="100"
                 android:progress="0"
                 android:alpha="0"
+                android:translationZ="1dp"
                 />
 
             <RelativeLayout
@@ -90,6 +92,7 @@
                 android:layout_alignParentBottom="true"
                 android:background="#80000000"
                 android:translationY="80dp"
+                android:translationZ="1dp"
                 >
                 <ImageView
                     android:id="@+id/newPhotoBack"
