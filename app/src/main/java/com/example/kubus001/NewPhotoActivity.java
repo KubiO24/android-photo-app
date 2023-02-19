@@ -39,13 +39,17 @@ import com.bikomobile.multipart.Multipart;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 public class NewPhotoActivity extends AppCompatActivity {
     boolean showControls = false;
@@ -83,6 +87,7 @@ public class NewPhotoActivity extends AppCompatActivity {
                     settings.animate().translationY(convertDpToPx(-80));
                     controls.animate().translationY(convertDpToPx(90));
                     showControls = false;
+                    seekBar.setAlpha(0f);
                 }else{
                     settings.animate().translationY(0);
                     controls.animate().translationY(convertDpToPx(10));
@@ -238,9 +243,21 @@ public class NewPhotoActivity extends AppCompatActivity {
                         break;
 
                     case 1:
+                        Uri uri = null;
+                        try {
+                            File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "to-share.png");
+                            FileOutputStream stream = new FileOutputStream(file);
+                            Bitmap b = ((BitmapDrawable)image.getDrawable()).getBitmap();
+                            b.compress(Bitmap.CompressFormat.PNG, 90, stream);
+                            stream.close();
+                            uri = Uri.fromFile(file);
+                        } catch (IOException e) {
+                            break;
+                        }
+
                         Intent share = new Intent(Intent.ACTION_SEND);
-                        share.setType("image/jpeg");
-                        share.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://"+imagepath));
+                        share.setType("image/png");
+                        share.putExtra(Intent.EXTRA_STREAM, uri);
                         startActivity(Intent.createChooser(share, "Share this image!"));
                         break;
 
@@ -282,6 +299,7 @@ public class NewPhotoActivity extends AppCompatActivity {
         textView.setTextSize(24);
         textView.setAlpha(0f);
         mainLayout.addView(textView);
+        seekBar.setAlpha(0f);
         textView.animate()
                 .alpha(1f)
                 .setInterpolator(new AccelerateInterpolator())
@@ -294,8 +312,12 @@ public class NewPhotoActivity extends AppCompatActivity {
                                 .setDuration(500)
                                 .withEndAction(()->{
                                     mainLayout.removeView(textView);
+                                    if(!Objects.equals(selectedEffect, text)) {
+                                        originalBitmap = ((BitmapDrawable)image.getDrawable()).getBitmap();
+                                    }
                                     selectedEffect = text;
                                     seekBar.setAlpha(1f);
+                                    seekBar.setProgress(0);
                                 })
                                 .start();
                     }, 500);
@@ -304,18 +326,21 @@ public class NewPhotoActivity extends AppCompatActivity {
     }
 
     private void changeEffect(Integer value) {
+        Float floatValue = (value/100f) + 1;
         switch(selectedEffect) {
             case "brightness":
-                Bitmap newBitmap = ImageEdition.changeBrightness(originalBitmap, value);
-                image.setImageBitmap(newBitmap);
+                Bitmap brightnessBitmap = ImageEdition.changeBrightness(originalBitmap, value);
+                image.setImageBitmap(brightnessBitmap);
                 break;
 
             case "contrast":
-                // code block
+                Bitmap contrastBitmap = ImageEdition.changeContrast(originalBitmap, floatValue);
+                image.setImageBitmap(contrastBitmap);
                 break;
 
             case "saturation":
-                // code block
+                Bitmap saturationBitmap = ImageEdition.changeSaturation(originalBitmap, floatValue);
+                image.setImageBitmap(saturationBitmap);
                 break;
         }
     }
