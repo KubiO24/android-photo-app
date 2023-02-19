@@ -47,6 +47,9 @@ public class NetworkArrayAdapter extends ArrayAdapter {
             case 2:
                 image.setImageResource(R.drawable.ic_baseline_crop_24);
                 break;
+            case 3:
+                image.setImageResource(R.drawable.ic_baseline_brush_24);
+                break;
         }
 
         return convertView;

@@ -190,6 +190,7 @@ public class NewPhotoActivity extends AppCompatActivity {
         networkArray.add("upload");
         networkArray.add("share");
         networkArray.add("crop");
+        networkArray.add("effects");
 
         NetworkArrayAdapter adapter = new NetworkArrayAdapter(
                 NewPhotoActivity.this,
@@ -263,6 +264,10 @@ public class NewPhotoActivity extends AppCompatActivity {
 
                     case 2:
                         // crop
+                        break;
+
+                    case 3:
+                        // effects
                         break;
                 }
             }
