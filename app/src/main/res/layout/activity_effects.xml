@@ -4,7 +4,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".EffectsActivity"
-    android:background="@color/background">
+    android:background="@color/background"
+    android:id="@+id/effectsMainLayout">
+
+    <HorizontalScrollView
+        android:id="@+id/effectsScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:translationZ="1dp">
+
+        <LinearLayout
+            android:id="@+id/effectsLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+        </LinearLayout>
+
+    </HorizontalScrollView>
 
     <ImageView
         android:id="@+id/effectsImageView"

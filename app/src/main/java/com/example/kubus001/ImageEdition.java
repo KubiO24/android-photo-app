@@ -52,4 +52,66 @@ public class ImageEdition {
 
         return returnBitmap(oldBitmap, cMatrix);
     }
+
+    public static Bitmap changeColor(Bitmap oldBitmap, String type) {
+        ColorMatrix cMatrix = new ColorMatrix();
+
+        switch(type) {
+            case "normal":
+                cMatrix.set(new float[]{
+                        1, 0, 0, 0, 0,
+                        0, 1, 0, 0, 0,
+                        0, 0, 1, 0, 0,
+                        0, 0, 0, 1, 0
+                });
+                break;
+
+            case "blackWhite":
+                cMatrix.set(new float[]{
+                    1, 1, 1, 0, 0,
+                    1, 1, 1, 0, 0,
+                    1, 1, 1, 0, 0,
+                    0, 0, 0, 1, 0
+                });
+                break;
+
+            case "negative":
+                cMatrix.set(new float[]{
+                        -1, 0, 0, 1, 0,
+                        0, -1, 0, 1, 0,
+                        0, 0, -1, 1, 0,
+                        0, 0, 0, 1, 0
+                });
+                break;
+
+            case "red":
+                cMatrix.set(new float[]{
+                        1, 0, 0, 0, 0,
+                        0, 0, 0, 0, 0,
+                        0, 0, 0, 0, 0,
+                        0, 0, 0, 1, 0
+                });
+                break;
+
+            case "green":
+                cMatrix.set(new float[]{
+                        0, 0, 0, 0, 0,
+                        0, 1, 0, 0, 0,
+                        0, 0, 0, 0, 0,
+                        0, 0, 0, 1, 0
+                });
+                break;
+
+            case "blue":
+                cMatrix.set(new float[]{
+                        0, 0, 0, 0, 0,
+                        0, 0, 0, 0, 0,
+                        0, 0, 1, 0, 0,
+                        0, 0, 0, 1, 0
+                });
+                break;
+        }
+
+        return returnBitmap(oldBitmap, cMatrix);
+    }
 }
