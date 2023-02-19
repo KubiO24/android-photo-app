@@ -288,15 +288,14 @@ public class NewPhotoActivity extends AppCompatActivity {
                 .setDuration(500)
                 .withEndAction(()->{
                     new Handler().postDelayed(() -> {
-                        selectedEffect = text;
-                        seekBar.setAlpha(1f);
-
                         textView.animate()
                                 .alpha(0f)
                                 .setInterpolator(new AccelerateInterpolator())
                                 .setDuration(500)
                                 .withEndAction(()->{
                                     mainLayout.removeView(textView);
+                                    selectedEffect = text;
+                                    seekBar.setAlpha(1f);
                                 })
                                 .start();
                     }, 500);
@@ -307,7 +306,6 @@ public class NewPhotoActivity extends AppCompatActivity {
     private void changeEffect(Integer value) {
         switch(selectedEffect) {
             case "brightness":
-                Log.d("XXX", value.toString());
                 Bitmap newBitmap = ImageEdition.changeBrightness(originalBitmap, value);
                 image.setImageBitmap(newBitmap);
                 break;

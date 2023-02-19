@@ -65,11 +65,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
-                android:layout_alignParentTop="true"
-                android:translationY="80dp"
+                android:layout_centerInParent="true"
                 android:layout_centerHorizontal="true"
-                android:max="200"
-                android:progress="100"
+                android:min="-100"
+                android:max="100"
+                android:progress="0"
                 android:alpha="0"
                 />
 
