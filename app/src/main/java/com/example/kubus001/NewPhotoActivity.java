@@ -150,7 +150,7 @@ public class NewPhotoActivity extends AppCompatActivity {
         revert.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("XXX", "revert");
+                image.setImageBitmap(originalBitmap);
             }
         });
 
@@ -267,11 +267,24 @@ public class NewPhotoActivity extends AppCompatActivity {
                         break;
 
                     case 3:
-                        // effects
+                        Bitmap b = ((BitmapDrawable) image.getDrawable()).getBitmap();
+                        ImageEdition.myBitmap = b;
+                        Intent intent = new Intent(NewPhotoActivity.this, EffectsActivity.class);
+                        startActivity(intent);
                         break;
                 }
             }
         });
+    }
+
+    @Override
+    public void onRestart() {
+        super.onRestart();
+
+        image.setImageBitmap(ImageEdition.myBitmap);
+        ImageEdition.myBitmap = null;
+        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawerLayout.closeDrawer(GravityCompat.START);
     }
 
     private Bitmap betterImageDecode(String filePath) {

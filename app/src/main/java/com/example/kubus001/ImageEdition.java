@@ -7,6 +7,8 @@ import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
 
 public class ImageEdition {
+    public static Bitmap myBitmap = null;
+
     private static Bitmap returnBitmap(Bitmap oldBitmap, ColorMatrix cMatrix) {
         Paint paint = new Paint();
         Bitmap newBitmap = Bitmap.createBitmap(oldBitmap.getWidth(), oldBitmap.getHeight(), oldBitmap.getConfig());
